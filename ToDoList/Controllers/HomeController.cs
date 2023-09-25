@@ -6,21 +6,22 @@ namespace ToDoList.Controllers
   public class HomeController : Controller
   {
     
-    [Route("/")]
+    [HttpGet("/")]
     public ActionResult Index()
     {
       Item starterItem = new Item("Add first item to To Do List");
       return View(starterItem);
     }
 
-    [Route("/items/new")]
+    [HttpGet("/items/new")]
     public ActionResult CreateForm()
     {
       return View();
     }
 
     // when our form is submitted, this route will be invoked
-    [Route("/items")]
+    // we'll change our route decorator to for this method
+    [HttpPost("/items")]
     public ActionResult Create(string description)
     {
       Item myItem = new Item(description);
