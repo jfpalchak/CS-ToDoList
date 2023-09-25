@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using ToDoList.Models;
 
 namespace ToDoList.Controllers
@@ -9,8 +10,9 @@ namespace ToDoList.Controllers
     [HttpGet("/")]
     public ActionResult Index()
     {
-      Item starterItem = new Item("Add first item to To Do List");
-      return View(starterItem);
+      // We want Index to have access to _ALL_ Items:
+      List<Item> allItems = Item.GetAll();
+      return View(allItems);
     }
 
     [HttpGet("/items/new")]
@@ -21,16 +23,17 @@ namespace ToDoList.Controllers
 
     // when our form is submitted, this route will be invoked
     // we'll change our route decorator to for this method
+    // * This route only needs to _create_ a new Item,
+    // * so it doesn't care about updating a View!
+    // * Create item, then redirect to Index, which will update the corresponding View.
     [HttpPost("/items")]
     public ActionResult Create(string description)
     {
       Item myItem = new Item(description);
 
-      // the first argument here tells View to return the Index view,
-      // which means we don't need to add a new Create.cshtml view to 
-      // correspond with our Create() route!
-      // the second argument specifies what the Model property on the view should be
-      return View("Index", myItem);
+      // RedirectToAction takes a route method as an argument,
+      // and tells the server to invoke that route after Create() has been invoked
+      return RedirectToAction("Index");
     }
   }
 }
