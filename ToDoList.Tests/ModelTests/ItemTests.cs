@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using ToDoList.Models;
 using System;
 
-namespace ToDoList.Test
+namespace ToDoList.Tests
 {
   [TestClass]
   public class ItemTests : IDisposable
