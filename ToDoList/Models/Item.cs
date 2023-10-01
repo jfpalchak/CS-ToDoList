@@ -1,3 +1,4 @@
+using MySqlConnector;
 using System.Collections.Generic;
 
 namespace ToDoList.Models
@@ -6,35 +7,60 @@ namespace ToDoList.Models
   {
     public string Description { get; set; }
     public int Id { get; } // this is a READONLY property
-    // * NOTE: We don't add a set method, because this property will be set in the constructor automatically. In fact, we specifically don't ever want to manually edit it. That would increase the risk of IDs not being unique.
-    private static List<Item> _instances = new List<Item> { };
 
     // To Do Item constructor
     public Item(string description)
     {
       Description = description;
-      _instances.Add(this);
-      // create id upon item construction
-      Id = _instances.Count;
+    }
+
+    // Overloaded constructor
+    public Item (string description, int id)
+    {
+      Description = description;
+      Id = id;
     }
 
     // return list of To Do Items
     public static List<Item> GetAll()
     {
-      return _instances;
+      List<Item> allItems = new List<Item> {};
+
+      MySqlConnection conn = new MySqlConnection(DBConfiguration.ConnectionString);
+      conn.Open();
+
+      MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = "SELECT * FROM items;";
+
+      MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+      while (rdr.Read())
+      {
+        int itemId = rdr.GetInt32(0);
+        string itemDescription = rdr.GetString(1);
+        Item newItem = new Item(itemDescription, itemId);
+        allItems.Add(newItem);
+      }
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return allItems;
     }
 
     // clear list of To Do Items
     public static void ClearAll()
     {
-      _instances.Clear();
+      // refactor
     }
 
     // taking an item id, return that item from the list of items
     public static Item Find(int searchId)
     {
-      // subtract 1 from id, as index starts at zero and our id count starts at 1
-      return _instances[searchId-1];
+      // Temporarily return placeholder item to bypass compiler error
+      // until we refactor to work with database
+      Item placeholderItem = new Item("placeholder item");
+      return placeholderItem;
     }
   }
 }
