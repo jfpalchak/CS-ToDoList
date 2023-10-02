@@ -1,0 +1,18 @@
+@{
+  Layout = "_Layout";
+}
+@* MODEL DIRECTIVE: *@
+@model ToDoList.Models.Item
+
+<h4>Add a New Item</h4>
+@*  BeginForm() sends an HTTP POST request BY DEFAULT to the CURRENT URL!
+    In other words, in HTML, the form tag would look like:
+    <form action='/Items/Create' method='post'> 
+    THIS is the reason we strayed from RESTful routing. *@
+@using (Html.BeginForm())
+{
+  @Html.LabelFor(model => model.Description)
+  @Html.TextBoxFor(model => model.Description)
+  <input type="submit" value="Add New Item" />
+}
+<p>@Html.ActionLink("Show All Items", "Index")</p>
