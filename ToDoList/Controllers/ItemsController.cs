@@ -19,5 +19,20 @@ namespace ToDoList.Controllers
       List<Item> model = _db.Items.ToList();
       return View(model);
     }
+
+    // We stray from RESTful conventions for our GET Create route.
+    // This is because we want to implement HTML helper methods.
+    public ActionResult Create()
+    {
+      return View();
+    }
+
+    [HttpPost]
+    public ActionResult Create(Item item)
+    {
+      _db.Items.Add(item);
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
   }
 }

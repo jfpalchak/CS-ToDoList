@@ -1,5 +1,3 @@
-using MySqlConnector;
-using System.Collections.Generic;
 
 namespace ToDoList.Models
 {
