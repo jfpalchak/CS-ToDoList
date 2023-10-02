@@ -13,7 +13,7 @@
 
 @foreach (Item item in Model)
 {
-  <li>@item.Description</li>
+  <li>@Html.ActionLink($"{item.Description}", "Details", new { id = item.ItemId })</li>
 }
 
 <p>@Html.ActionLink("Add New Item", "Create")</p>
