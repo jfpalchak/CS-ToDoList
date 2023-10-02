@@ -6,7 +6,7 @@ namespace ToDoList.Models
   public class Item
   {
     public string Description { get; set; }
-    public int Id { get; } // this is a READONLY property
+    public int Id { get; set; }
 
     // To Do Item constructor
     public Item(string description)
@@ -94,6 +94,28 @@ namespace ToDoList.Models
       // until we refactor to work with database
       Item placeholderItem = new Item("placeholder item");
       return placeholderItem;
+    }
+
+    public void Save()
+    {
+      MySqlConnection conn = new MySqlConnection(DBConfiguration.ConnectionString);
+      conn.Open();
+
+      MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+
+      cmd.CommandText = "INSERT INTO items (description) VALUES (@ItemDescription);";
+      MySqlParameter param = new MySqlParameter();
+      param.ParameterName = "@ItemDescription";
+      param.Value = this.Description;
+      cmd.Parameters.Add(param);
+      cmd.ExecuteNonQuery();
+      Id = (int) cmd.LastInsertedId;
+
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
     }
   }
 }
