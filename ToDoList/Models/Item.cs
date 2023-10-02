@@ -6,7 +6,7 @@ namespace ToDoList.Models
   public class Item
   {
     public string Description { get; set; }
-    public int Id { get; set; }
+    public int ItemId { get; set; }
 
     // To Do Item constructor
     public Item(string description)
@@ -18,7 +18,7 @@ namespace ToDoList.Models
     public Item (string description, int id)
     {
       Description = description;
-      Id = id;
+      ItemId = id;
     }
 
     // overriding the build-in method Equals
@@ -32,7 +32,7 @@ namespace ToDoList.Models
       else
       {
         Item newItem = (Item) otherItem;
-        bool idEquality = (this.Id == newItem.Id);
+        bool idEquality = (this.ItemId == newItem.ItemId);
         bool descriptionEquality = (this.Description == newItem.Description);
         return (idEquality && descriptionEquality);
       }
@@ -41,7 +41,7 @@ namespace ToDoList.Models
     // overriding the GetHashCode method
     public override int GetHashCode()
     {
-      return Id.GetHashCode();
+      return ItemId.GetHashCode();
     }
 
     // return list of To Do Items
@@ -146,7 +146,7 @@ namespace ToDoList.Models
       param.Value = this.Description;
       cmd.Parameters.Add(param);
       cmd.ExecuteNonQuery();
-      Id = (int) cmd.LastInsertedId;
+      ItemId = (int) cmd.LastInsertedId;
 
       conn.Close();
       if (conn != null)
