@@ -21,6 +21,28 @@ namespace ToDoList.Models
       Id = id;
     }
 
+    // overriding the build-in method Equals
+    // will allow our tests to know when we want two different objects to be considered the same
+    public override bool Equals(System.Object otherItem)
+    {
+      if (!(otherItem is Item))
+      {
+        return false;
+      }
+      else
+      {
+        Item newItem = (Item) otherItem;
+        bool descriptionEquality = (this.Description == newItem.Description);
+        return descriptionEquality;
+      }
+    }
+
+    // overriding the GetHashCode method
+    public override int GetHashCode()
+    {
+      return Id.GetHashCode();
+    }
+
     // return list of To Do Items
     public static List<Item> GetAll()
     {
