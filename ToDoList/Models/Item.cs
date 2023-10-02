@@ -48,10 +48,21 @@ namespace ToDoList.Models
       return allItems;
     }
 
-    // clear list of To Do Items
+    // clear entire items table in our database
     public static void ClearAll()
     {
-      // refactor
+      MySqlConnection conn = new MySqlConnection(DBConfiguration.ConnectionString);
+      conn.Open();
+
+      MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = "DELETE FROM items;";
+      cmd.ExecuteNonQuery();
+
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
     }
 
     // taking an item id, return that item from the list of items
