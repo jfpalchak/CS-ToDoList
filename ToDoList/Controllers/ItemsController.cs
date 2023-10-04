@@ -40,6 +40,10 @@ namespace ToDoList.Controllers
     [HttpPost]
     public ActionResult Create(Item item)
     {
+      if (item.CategoryId == 0)
+      {
+        return RedirectToAction("Create");
+      }
       _db.Items.Add(item);
       _db.SaveChanges();
       return RedirectToAction("Index");
