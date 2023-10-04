@@ -1,67 +1,72 @@
-using System.Collections.Generic;
-using System;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
+using System;
 using ToDoList.Models;
 
 namespace ToDoList.Controllers
 {
   public class CategoriesController : Controller
   {
-    // // SHOW ALL CATEGORIES
-    // [HttpGet("/categories")]
-    // public ActionResult Index()
-    // {
-    //   List<Category> allCategories = Category.GetAll();
-    //   return View(allCategories);
-    // }
+    private readonly ToDoListContext _db;
 
-    // // SHOW FORM TO CREATE NEW CATEGORY
-    // [HttpGet("/categories/new")]
-    // public ActionResult New()
-    // {
-    //   return View();
-    // }
+    public CategoriesController(ToDoListContext db)
+    {
+      _db = db;
+    }
 
-    // // CREATE NEW CATEGORY
-    // [HttpPost("/categories")]
-    // public ActionResult Create(string categoryName)
-    // {
-    //   Category newCategory = new Category(categoryName);
-    //   return RedirectToAction("Index");
-    // }
+    public ActionResult Index()
+    {
+      List<Category> model = _db.Categories.ToList();
+      return View(model);
+    }
 
-    // // SHOW SPECIFIC CATEGORY & ITS ITEMS
-    // [HttpGet("/categories/{id}")]
-    // public ActionResult Show(int id)
-    // {
-    //   Dictionary<string, object> model = new Dictionary<string, object>();
-    //   Category selectedCategory = Category.Find(id);
-    //   List<Item> categoryItems = selectedCategory.Items;
-    //   model.Add("category", selectedCategory);
-    //   model.Add("items", categoryItems);
-    //   return View(model);
-    // }
+    public ActionResult Create()
+    {
+      return View();
+    }
 
-    // // Because new Items all belong to Categories, the act of creating a new Item now alters our Category objects. As such, it's more accurate to say it's related to our Category model now. 
-    // // To follow best practices, we've moved the Item's Create() route to the Category Controller.
-    // // This is standard practices in applications that use objects within objects, like ours.
-    // // * Even though this controller already has a Create() route, they won't get mixed up because they have distinctly different paths.
-    // // * CREATE new ITEMS, not new Categories.
-    // [HttpPost("/categories/{categoryId}/items")]
-    // public ActionResult Create(int categoryId, string itemDescription) 
-    // {
-    //   Dictionary<string, object> model = new Dictionary<string, object>();
-    //   Category foundCategory = Category.Find(categoryId);
-    //   Item newItem = new Item(itemDescription);
-    //   newItem.Save(); // Updated code!
+    [HttpPost]
+    public ActionResult Create(Category category)
+    {
+      _db.Categories.Add(category);
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
 
-    //   foundCategory.AddItem(newItem);
-    //   List<Item> categoryItems = foundCategory.Items;
+    public ActionResult Details(int id)
+    {
+      Category foundCategory = _db.Categories.FirstOrDefault(category => category.CategoryId == id);
+      return View(foundCategory);
+    }
 
-    //   model.Add("items", categoryItems);
-    //   model.Add("category", foundCategory);
+    public ActionResult Edit(int id)
+    {
+      Category foundCategory = _db.Categories.FirstOrDefault(category => category.CategoryId == id);
+      return View(foundCategory);
+    }
 
-    //   return View("Show", model);
-    // }
+    [HttpPost]
+    public ActionResult Edit(Category category)
+    {
+      _db.Categories.Update(category);
+      _db.SaveChanges();
+      return View("Details", category);
+    }
+
+    public ActionResult Delete(int id)
+    {
+      Category foundCategory = _db.Categories.FirstOrDefault(category => category.CategoryId == id);
+      return View(foundCategory);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    public ActionResult DeleteConfirmed(int id)
+    {
+      Category thisCategory = _db.Categories.FirstOrDefault(category => category.CategoryId == id);
+      _db.Categories.Remove(thisCategory);
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
   }
 }
