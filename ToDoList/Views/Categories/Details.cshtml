@@ -8,7 +8,7 @@
 
 <h2>Category Details</h2>
 <hr />
-<h3>@Model.Name</h3>
+<h3>@Html.DisplayNameFor(model => model.Name): @Html.DisplayFor(model => model.Name)</h3>
 
 @if (Model.Items.Count == 0)
 {
