@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -23,10 +24,16 @@ namespace ToDoList.Controllers
       return View(model);
     }
 
-    // We stray from RESTful conventions for our GET Create route.
-    // This is because we want to implement HTML helper methods.
     public ActionResult Create()
     {
+      // A SelectList will provide a list of the data needed to create an html <select>
+      // list of all the categories from our database.
+      // The first argument for SelectList represents the data that will populate the
+      // SelectList's <option> elements.
+      // The seconds argument is the value of every <option> element: the Category's Id.
+      // The third argument is the displayed text of every <option> element: the name of
+      // the Category.
+      ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
       return View();
     }
 
@@ -47,6 +54,7 @@ namespace ToDoList.Controllers
     public ActionResult Edit(int id)
     {
       Item thisItem = _db.Items.FirstOrDefault(item => item.ItemId == id);
+      ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
       return View(thisItem);
     }
 
