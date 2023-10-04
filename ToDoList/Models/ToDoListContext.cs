@@ -7,6 +7,7 @@ namespace ToDoList.Models
     // This represents the Items table in our database.
     // This property declares our entity, Items, in our ToDoList database context.
     public DbSet<Item> Items { get; set; }
+    public DbSet<Category> Categories { get; set; }
     
     // We invoke the constructor behavior from the parent DbContext class.
     // The argument for this parameter will be passed through dependency injection
