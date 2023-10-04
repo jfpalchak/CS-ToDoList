@@ -17,6 +17,9 @@
   @Html.LabelFor(model => model.Description)
   @Html.EditorFor(model => model.Description)
 
+  @Html.LabelFor(model => model.Category)
+  @Html.DropDownList("CategoryId")
+  <br/>
   <input type="submit" value="Save" />
 }
 
