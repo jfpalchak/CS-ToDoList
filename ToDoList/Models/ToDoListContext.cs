@@ -9,6 +9,8 @@ namespace ToDoList.Models
     public DbSet<Item> Items { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Tag> Tags { get; set; }
+    // Join Entity: joining both Items and Tags to track their many-to-many relationship
+    public DbSet<ItemTag> ItemTags { get; set; }
     
     // We invoke the constructor behavior from the parent DbContext class.
     // The argument for this parameter will be passed through dependency injection
