@@ -51,8 +51,10 @@ namespace ToDoList.Controllers
 
     public ActionResult Details(int id)
     {
-      Item thisItem = _db.Items
-                          .Include(item => item.Category) // Include the Category!
+      Item thisItem = _db.Items // * Notice we're listing Include() for each Navigation Property in Item!
+                          .Include(item => item.Category) // Include the Category (nav property)!
+                          .Include(item => item.JoinEntities) // Include the Join Entity (nav property)!
+                          .ThenInclude(join => join.Tag) // Include each Tag found in the Join Entity!
                           .FirstOrDefault(item => item.ItemId == id);
       return View(thisItem);
     }
