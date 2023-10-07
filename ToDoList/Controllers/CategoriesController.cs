@@ -41,6 +41,8 @@ namespace ToDoList.Controllers
       // navigation property Items with .Include(), it won't gather that data!
       Category foundCategory = _db.Categories
                                   .Include(category => category.Items)
+                                  .ThenInclude(item => item.JoinEntities) // Then, grab each Join Entity for each Item
+                                  .ThenInclude(join => join.Tag) // THEN, grab each Tag associated with each Join Entity of an Item
                                   .FirstOrDefault(category => category.CategoryId == id);
       return View(foundCategory);
     }
