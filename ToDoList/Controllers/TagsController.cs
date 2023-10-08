@@ -80,5 +80,23 @@ namespace ToDoList.Controllers
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
+
+    public ActionResult Delete(int id)
+    {
+      Tag thisTag = _db.Tags.FirstOrDefault(tags => tags.TagId == id);
+      return View(thisTag);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    public ActionResult DeleteConfirmed(int id)
+    {
+      // When we delete a Tag, ALL JOIN ENTITIES that REFERENCE this Tag's TagId will ALSO
+      // automatically be DELETED -> this is configured through ~Foreign Key Constraints~
+      // This is known as CASCADE DELETE
+      Tag thisTag = _db.Tags.FirstOrDefault(tags => tags.TagId == id);
+      _db.Tags.Remove(thisTag);
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
   }
 }
