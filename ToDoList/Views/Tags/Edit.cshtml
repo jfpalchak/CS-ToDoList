@@ -1,0 +1,22 @@
+@{
+  Layout = "_Layout";
+}
+
+@model ToDoList.Models.Tag;
+
+<h2>Edit</h2>
+
+<h4>Edit this Tag: @Html.DisplayFor(model => model.Title)</h4>
+
+@using (Html.BeginForm())
+{
+  @Html.HiddenFor(model => model.TagId)
+
+  @Html.LabelFor(model => model.Title)
+  @Html.EditorFor(model => model.Title)
+  
+  <br/>
+  <input type="submit" value="Save" class="btn btn-primary" />
+}
+
+<p>@Html.ActionLink("Back to List", "Index")</p>
