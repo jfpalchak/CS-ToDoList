@@ -5,13 +5,9 @@
 @model ToDoList.Models.Item
 
 <h4>Add a New Item</h4>
-@*  BeginForm() sends an HTTP POST request BY DEFAULT to the CURRENT URL!
-    In other words, in HTML, the form tag would look like:
-    <form action='/Items/Create' method='post'> 
-    THIS is the reason we strayed from RESTful routing. *@
 
-<p><strong>NOTE:</strong> You need to have at least one category before you can add an item!</p>
-<p>Go to @Html.ActionLink("this page", "Create", "Categories") to create a category.</p>
+<p>@Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger", @style = "font-weight: 600;" })</p>
+<p>@Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger", @style = "font-weight: 600;" })</p>
 
 @using (Html.BeginForm())
 {
