@@ -1,8 +1,9 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ToDoList.Models
 {
-  public class ToDoListContext : DbContext
+  public class ToDoListContext : IdentityDbContext<ApplicationUser>
   {
     // This represents the Items table in our database.
     // This property declares our entity, Items, in our ToDoList database context.
