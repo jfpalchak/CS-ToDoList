@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization; // lets us use the [Authorize] attribute
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using ToDoList.Models;
 
 namespace ToDoList.Controllers
 {
+  [Authorize] // this allows access to the controller ONLY if a user is logged in
   public class ItemsController : Controller
   {
     private readonly ToDoListContext _db;

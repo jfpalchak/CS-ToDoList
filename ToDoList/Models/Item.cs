@@ -20,5 +20,8 @@ namespace ToDoList.Models
 
     // Collection Navigation Property (for our many-to-many relationship with Tag)
     public List<ItemTag> JoinEntities { get; }
+
+    // ASSOCIATE A USER WITH A SPECIFIC TO-DO ITEM
+    public ApplicationUser User { get; set; }
   }
 }
