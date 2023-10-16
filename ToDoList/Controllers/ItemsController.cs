@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Authorization; // lets us use the [Authorize] attribute
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Security.Claims;
 using ToDoList.Models;
 
 namespace ToDoList.Controllers
@@ -12,15 +15,22 @@ namespace ToDoList.Controllers
   public class ItemsController : Controller
   {
     private readonly ToDoListContext _db;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public ItemsController(ToDoListContext db)
+    public ItemsController(UserManager<ApplicationUser> userManager, ToDoListContext database)
     {
-      _db = db;
+      _userManager = userManager;
+      _db = database;
     }
 
-    public ActionResult Index()
+    public async Task<ActionResult> Index()
     {
-      List<Item> model = _db.Items
+      string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+      List<Item> userItems = _db.Items
+                            // find the Items where the User Id associated with the Item
+                            // is the same as the Id that belongs to the Current User
+                            .Where(entry => entry.User.Id == currentUser.Id)
                             .Include(item => item.Category)
                             .ToList();
       return View(model);
@@ -40,7 +50,7 @@ namespace ToDoList.Controllers
     }
 
     [HttpPost]
-    public ActionResult Create(Item item)
+    public async Task<ActionResult> Create(Item item, int CategoryId)
     {
       if (!ModelState.IsValid)
       {
@@ -49,6 +59,9 @@ namespace ToDoList.Controllers
       }
       else
       {
+        string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+        item.User = currentUser;
         _db.Items.Add(item);
         _db.SaveChanges();
         return RedirectToAction("Index");
