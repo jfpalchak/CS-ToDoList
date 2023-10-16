@@ -1,0 +1,31 @@
+@{
+  Layout = "_Layout";
+}
+
+@using ToDoList.ViewModels
+
+@model LoginViewModel
+
+<h2>Log in with your Accoutn</h2>
+<hr/>
+
+@if(!ViewData.ModelState.IsValid)
+{
+  @Html.ValidationSummary("Please fix the following error(s) and then resubmit the form:")
+}
+
+@using (Html.BeginForm())
+{
+  @Html.LabelFor(m => m.Email)
+  <br/>
+  @Html.TextBoxFor(m =>m.Email)
+  <br/>
+  @Html.LabelFor(m => m.Password)
+  <br/>
+  @Html.EditorFor(m => m.Password)
+  <br/>
+  <input type="submit" value="Log In" />
+}
+
+<p>@Html.ActionLink("Register for an Account", "Register")</p>
+<p>@Html.ActionLink("Back to Accounts Page", "Index")</p>
