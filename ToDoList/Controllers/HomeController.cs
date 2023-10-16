@@ -16,6 +16,7 @@ namespace ToDoList.Controllers
     public HomeController(UserManager<ApplicationUser> userManager, ToDoListContext db)
     {
       _db = db;
+      _userManager = userManager;
     }
 
     [HttpGet("/")]
@@ -24,6 +25,7 @@ namespace ToDoList.Controllers
       Category[] cats = _db.Categories.ToArray();
       Dictionary<string, object[]> model = new Dictionary<string, object[]> ();
       model.Add("categories", cats);
+
       string userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
       if (currentUser != null)

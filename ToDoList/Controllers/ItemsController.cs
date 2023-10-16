@@ -33,7 +33,7 @@ namespace ToDoList.Controllers
                             .Where(entry => entry.User.Id == currentUser.Id)
                             .Include(item => item.Category)
                             .ToList();
-      return View(model);
+      return View(userItems);
     }
 
     public ActionResult Create()
